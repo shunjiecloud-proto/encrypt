@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option go_package = "github.com/shunjiecloud/captcha-srv;captcha_srv";
+
+service Captcha {
+    rpc CaptchaVerfify(CaptchaVerfifyRequest) returns (CaptchaVerfifyResponse) {}
+}
+
+message CaptchaVerfifyRequest{
+    string captchaId = 1;
+    string solution = 2;
+}
+
+message CaptchaVerfifyResponse{
+    bool result = 1;
+}
