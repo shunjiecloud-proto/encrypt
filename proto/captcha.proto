@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/shunjiecloud-proto/captcha";
+option go_package = "github.com/shunjiecloud-proto/captcha/proto";
 
 service Captcha {
     rpc CaptchaVerfify(CaptchaVerfifyRequest) returns (CaptchaVerfifyResponse) {}
