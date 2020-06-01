@@ -12,7 +12,7 @@ message CaptchaIdRequest{
 }
 
 message CaptchaIdResponse{
-    int64 captchaId = 1;
+    string captchaId = 1;
 }
 
 message CaptchaVerfifyRequest{
