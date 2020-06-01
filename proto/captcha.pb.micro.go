@@ -42,6 +42,7 @@ func NewCaptchaEndpoints() []*api.Endpoint {
 // Client API for Captcha service
 
 type CaptchaService interface {
+	CaptchaId(ctx context.Context, in *CaptchaIdRequest, opts ...client.CallOption) (*CaptchaIdResponse, error)
 	CaptchaVerfify(ctx context.Context, in *CaptchaVerfifyRequest, opts ...client.CallOption) (*CaptchaVerfifyResponse, error)
 }
 
@@ -57,6 +58,16 @@ func NewCaptchaService(name string, c client.Client) CaptchaService {
 	}
 }
 
+func (c *captchaService) CaptchaId(ctx context.Context, in *CaptchaIdRequest, opts ...client.CallOption) (*CaptchaIdResponse, error) {
+	req := c.c.NewRequest(c.name, "Captcha.CaptchaId", in)
+	out := new(CaptchaIdResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *captchaService) CaptchaVerfify(ctx context.Context, in *CaptchaVerfifyRequest, opts ...client.CallOption) (*CaptchaVerfifyResponse, error) {
 	req := c.c.NewRequest(c.name, "Captcha.CaptchaVerfify", in)
 	out := new(CaptchaVerfifyResponse)
@@ -70,11 +81,13 @@ func (c *captchaService) CaptchaVerfify(ctx context.Context, in *CaptchaVerfifyR
 // Server API for Captcha service
 
 type CaptchaHandler interface {
+	CaptchaId(context.Context, *CaptchaIdRequest, *CaptchaIdResponse) error
 	CaptchaVerfify(context.Context, *CaptchaVerfifyRequest, *CaptchaVerfifyResponse) error
 }
 
 func RegisterCaptchaHandler(s server.Server, hdlr CaptchaHandler, opts ...server.HandlerOption) error {
 	type captcha interface {
+		CaptchaId(ctx context.Context, in *CaptchaIdRequest, out *CaptchaIdResponse) error
 		CaptchaVerfify(ctx context.Context, in *CaptchaVerfifyRequest, out *CaptchaVerfifyResponse) error
 	}
 	type Captcha struct {
@@ -86,6 +99,10 @@ func RegisterCaptchaHandler(s server.Server, hdlr CaptchaHandler, opts ...server
 
 type captchaHandler struct {
 	CaptchaHandler
+}
+
+func (h *captchaHandler) CaptchaId(ctx context.Context, in *CaptchaIdRequest, out *CaptchaIdResponse) error {
+	return h.CaptchaHandler.CaptchaId(ctx, in, out)
 }
 
 func (h *captchaHandler) CaptchaVerfify(ctx context.Context, in *CaptchaVerfifyRequest, out *CaptchaVerfifyResponse) error {
