@@ -13,7 +13,7 @@ message GetPublicKeyRequest{
 }
 
 message GetPublicKeyResponse{
-    string publicKey = 1;
+    string public_key = 1;
 }
 
 message EncryptRequest{
@@ -21,11 +21,11 @@ message EncryptRequest{
 }
 
 message EncryptResponse{
-    string cipherText  = 1;
+    string cipher_text  = 1;
 }
 
 message DecryptRequest{
-    string cipherText  = 1;
+    string cipher_text  = 1;
 }
 
 message DecryptResponse{
