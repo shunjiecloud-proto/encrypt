@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option go_package = "github.com/shunjiecloud-proto/encrypt/proto";
+
+service Encrypt {
+    rpc GetPublicKey(GetPublicKeyRequest) returns (GetPublicKeyResponse) {}
+    rpc Decrypt(DecryptRequest) returns (DecryptResponse) {}
+}
+
+message GetPublicKeyRequest{
+
+}
+
+message GetPublicKeyResponse{
+    string publicKey = 1;
+}
+
+message DecryptRequest{
+    string cipherText  = 1;
+}
+
+message DecryptResponse{
+    string original  = 1;
+}

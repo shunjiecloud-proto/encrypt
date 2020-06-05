@@ -1,4 +1,4 @@
-module github.com/shunjiecloud-proto/captcha
+module github.com/shunjiecloud-proto/encrypt
 
 go 1.14
 
