@@ -43,6 +43,7 @@ func NewEncryptEndpoints() []*api.Endpoint {
 
 type EncryptService interface {
 	GetPublicKey(ctx context.Context, in *GetPublicKeyRequest, opts ...client.CallOption) (*GetPublicKeyResponse, error)
+	Encrypt(ctx context.Context, in *EncryptRequest, opts ...client.CallOption) (*EncryptResponse, error)
 	Decrypt(ctx context.Context, in *DecryptRequest, opts ...client.CallOption) (*DecryptResponse, error)
 }
 
@@ -68,6 +69,16 @@ func (c *encryptService) GetPublicKey(ctx context.Context, in *GetPublicKeyReque
 	return out, nil
 }
 
+func (c *encryptService) Encrypt(ctx context.Context, in *EncryptRequest, opts ...client.CallOption) (*EncryptResponse, error) {
+	req := c.c.NewRequest(c.name, "Encrypt.Encrypt", in)
+	out := new(EncryptResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *encryptService) Decrypt(ctx context.Context, in *DecryptRequest, opts ...client.CallOption) (*DecryptResponse, error) {
 	req := c.c.NewRequest(c.name, "Encrypt.Decrypt", in)
 	out := new(DecryptResponse)
@@ -82,12 +93,14 @@ func (c *encryptService) Decrypt(ctx context.Context, in *DecryptRequest, opts .
 
 type EncryptHandler interface {
 	GetPublicKey(context.Context, *GetPublicKeyRequest, *GetPublicKeyResponse) error
+	Encrypt(context.Context, *EncryptRequest, *EncryptResponse) error
 	Decrypt(context.Context, *DecryptRequest, *DecryptResponse) error
 }
 
 func RegisterEncryptHandler(s server.Server, hdlr EncryptHandler, opts ...server.HandlerOption) error {
 	type encrypt interface {
 		GetPublicKey(ctx context.Context, in *GetPublicKeyRequest, out *GetPublicKeyResponse) error
+		Encrypt(ctx context.Context, in *EncryptRequest, out *EncryptResponse) error
 		Decrypt(ctx context.Context, in *DecryptRequest, out *DecryptResponse) error
 	}
 	type Encrypt struct {
@@ -103,6 +116,10 @@ type encryptHandler struct {
 
 func (h *encryptHandler) GetPublicKey(ctx context.Context, in *GetPublicKeyRequest, out *GetPublicKeyResponse) error {
 	return h.EncryptHandler.GetPublicKey(ctx, in, out)
+}
+
+func (h *encryptHandler) Encrypt(ctx context.Context, in *EncryptRequest, out *EncryptResponse) error {
+	return h.EncryptHandler.Encrypt(ctx, in, out)
 }
 
 func (h *encryptHandler) Decrypt(ctx context.Context, in *DecryptRequest, out *DecryptResponse) error {
