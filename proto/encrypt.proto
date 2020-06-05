@@ -4,6 +4,7 @@ option go_package = "github.com/shunjiecloud-proto/encrypt/proto";
 
 service Encrypt {
     rpc GetPublicKey(GetPublicKeyRequest) returns (GetPublicKeyResponse) {}
+    rpc Encrypt(EncryptRequest) returns (EncryptResponse) {}
     rpc Decrypt(DecryptRequest) returns (DecryptResponse) {}
 }
 
@@ -13,6 +14,14 @@ message GetPublicKeyRequest{
 
 message GetPublicKeyResponse{
     string publicKey = 1;
+}
+
+message EncryptRequest{
+    string original  = 1;
+}
+
+message EncryptResponse{
+    string cipherText  = 1;
 }
 
 message DecryptRequest{
