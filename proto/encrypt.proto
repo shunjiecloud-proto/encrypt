@@ -14,10 +14,12 @@ message GetPublicKeyRequest{
 
 message GetPublicKeyResponse{
     string public_key = 1;
+    string public_key_id = 2;
 }
 
 message EncryptRequest{
     string original  = 1;
+    string public_key_id = 2;
 }
 
 message EncryptResponse{
@@ -26,6 +28,7 @@ message EncryptResponse{
 
 message DecryptRequest{
     string cipher_text  = 1;
+    string public_key_id = 2;
 }
 
 message DecryptResponse{
